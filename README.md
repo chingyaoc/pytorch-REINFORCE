@@ -2,10 +2,9 @@
 
 <img src="assets/algo.png" width="800"> 
 
-PyTorch implementation of REINFORCE, supporting both **continuous** and **discrete** task.
-This repo supports the environments in OpenAI gym. 
+PyTorch implementation of REINFORCE.     
+This repo supports both **continuous** and **discrete** environments in OpenAI gym. 
 
-Contributions are welcome. If you know how to make it more stable, don't hesitate to send a pull request.
 
 ## Requirement
 - python 2.7
@@ -20,3 +19,15 @@ Use the default hyperparameters. *(Program will detect whether the environment i
 ```
 python main.py --env_name [name of environment]
 ```
+
+## Experiment results
+### continuous: InvertedPendulum-v1
+
+<img src="assets/InvertedPendulum-v1.png" width="800">
+
+### discrete: CartPole-v0
+
+<img src="assets/CartPole-v0.png" width="800">
+
+## Reference
+- [pytorch example](https://github.com/pytorch/examples/blob/master/reinforcement_learning/reinforce.py)
