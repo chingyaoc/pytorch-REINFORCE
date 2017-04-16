@@ -15,7 +15,7 @@ Contributions are welcome. If you know how to make it more stable, don't hesitat
 
 
 ## Run
-Use the default hyperparameters. (Program will detect whether the environment is continuous or discrete)
+Use the default hyperparameters. *(Program will detect whether the environment is continuous or discrete)*
 
 ```
 python main.py --env_name [name of environment]
