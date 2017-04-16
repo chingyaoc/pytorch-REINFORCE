@@ -1,20 +1,16 @@
 import argparse, math, os
-from collections import namedtuple
-from itertools import count
-
-import gym
 import numpy as np
+import gym
 from gym import wrappers
 
 import torch
 from torch.autograd import Variable
 import torch.nn.utils as utils
 
-from reinforce import REINFORCE
 from normalized_actions import NormalizedActions
 
 parser = argparse.ArgumentParser(description='PyTorch REINFORCE example')
-parser.add_argument('--env_name', type=str, default='InvertedPendulum-v1')
+parser.add_argument('--env_name', type=str, default='CartPole-v0')
 parser.add_argument('--gamma', type=float, default=0.99, metavar='G',
                     help='discount factor for reward (default: 0.99)')
 parser.add_argument('--exploration_end', type=int, default=100, metavar='N',
@@ -36,7 +32,12 @@ parser.add_argument('--display', type=bool, default=False,
 args = parser.parse_args()
 
 env_name = args.env_name
-env = NormalizedActions(gym.make(env_name))
+env = gym.make(env_name)
+if type(env.action_space) != gym.spaces.discrete.Discrete:
+    from reinforce_continuous import REINFORCE
+    env = NormalizedActions(gym.make(env_name))
+else:
+    from reinforce_discrete import REINFORCE
 
 if args.display:
     env = wrappers.Monitor(env, '/tmp/{}-experiment'.format(env_name), force=True)
@@ -47,7 +48,7 @@ np.random.seed(args.seed)
 
 agent = REINFORCE(args.hidden_size, env.observation_space.shape[0], env.action_space)
 
-dir = os.path.join('ckpt', args.env_name)
+dir = 'ckpt_' + env_name
 if not os.path.exists(dir):    
     os.mkdir(dir)
 
@@ -56,9 +57,7 @@ for i_episode in range(args.num_episodes):
     entropies = []
     log_probs = []
     rewards = []
-    count = 0
     for t in range(args.num_steps):
-        count += 1
         action, log_prob, entropy = agent.select_action(state)
         action = action.cpu()
 
@@ -76,7 +75,7 @@ for i_episode in range(args.num_episodes):
 
 
     if i_episode%args.ckpt_freq == 0:
-	torch.save(agent.model.state_dict(), os.path.join(dir, 'naf-'+str(i_episode)+'.pkl'))
+	torch.save(agent.model.state_dict(), os.path.join(dir, 'reinforce-'+str(i_episode)+'.pkl'))
 
     print("Episode: {}, reward: {}".format(i_episode, np.sum(rewards)))
 	
