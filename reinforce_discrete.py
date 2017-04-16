@@ -50,7 +50,8 @@ class REINFORCE:
         for i in reversed(range(len(rewards))):
             R = gamma * R + rewards[i]
             loss = loss - (log_probs[i]*(Variable(R).expand_as(log_probs[i])).cuda()).sum() - (0.0001*entropies[i].cuda()).sum()
-
+        loss = loss / len(rewards)
+		
         self.optimizer.zero_grad()
         loss.backward()
 	utils.clip_grad_norm(self.model.parameters(), 40)
