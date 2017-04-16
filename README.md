@@ -14,6 +14,6 @@ Contributions are welcome. If you know how to make it more stable, don't hesitat
 ## Run
 Use the default hyperparameters.
 
-```python
+```
 python main.py --env_name [name of environment]
 ```
